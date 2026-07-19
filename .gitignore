@@ -1,0 +1,9 @@
+target/
+reports/*
+!reports/.gitkeep
+logs/*
+!logs/.gitkeep
+*.class
+.idea/
+*.iml
+.vscode/
