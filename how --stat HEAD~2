@@ -1,0 +1,28 @@
+[33mcommit 1bba0ca3b440b89b8db25eb046d01bd917a053de[m
+Author: akashsb2005 <bagojiakash75@gmail.com>
+Date:   Wed Jul 29 16:16:32 2026 +0530
+
+    fix: switch to direct test class execution to resolve suite-XML instability; finalize headless mode, self-healing DriverFactory, pinned Chrome/ChromeDriver setup
+
+ allure-results/01c4737e-3400-43b3-b6f9-d580ce895dc6-container.json | 1 [32m+[m
+ allure-results/0478778c-e8c6-436f-ad6d-11814f9e71f9-result.json    | 1 [32m+[m
+ allure-results/0da7b49f-e0ba-4187-8262-9cf3693a534f-result.json    | 1 [32m+[m
+ allure-results/2a4b3a80-f395-4333-a6c3-b8cc59a1f682-container.json | 1 [32m+[m
+ allure-results/2a6ef2a3-e46f-4a80-8e66-506a7a251396-result.json    | 1 [32m+[m
+ allure-results/31d600d8-15a2-40f3-a4f2-b5e237a1881d-container.json | 1 [32m+[m
+ allure-results/482ff248-c9b7-4c46-b0e5-642367573834-container.json | 1 [32m+[m
+ allure-results/48ecced7-1d94-44c5-b1a5-77fb9a7ce262-result.json    | 1 [32m+[m
+ allure-results/6c8166cd-c1c1-4c3d-b8b7-39db7af02970-container.json | 1 [32m+[m
+ allure-results/91e578ed-1c6e-46b9-9f7a-820b9356df62-container.json | 1 [32m+[m
+ allure-results/95dedc01-f867-4c4f-b46c-70fca0970fad-container.json | 1 [32m+[m
+ allure-results/993c5726-7e12-4f93-b447-fd7b0807e814-container.json | 1 [32m+[m
+ allure-results/9cc22fd6-042f-46d0-a3c6-98b2bcc840a5-container.json | 1 [32m+[m
+ allure-results/a454bf3d-739d-4ed9-b498-5c2490f116b1-container.json | 1 [32m+[m
+ allure-results/a9d121bf-afc7-4a1b-906e-bb6470a5371e-result.json    | 1 [32m+[m
+ allure-results/c32da621-8e83-4adc-b94e-cc43851a19da-container.json | 1 [32m+[m
+ allure-results/dae755dc-70c0-4d8c-8305-4010fdb65e9e-container.json | 1 [32m+[m
+ allure-results/e5b9f732-6bf9-4945-bf09-495a5b04ce42-container.json | 1 [32m+[m
+ allure-results/e6a836a2-9e07-4f43-a65b-d42f8d4b58b6-container.json | 1 [32m+[m
+ allure-results/ed84d31a-64bb-4907-8d58-980cb7b53dc5-container.json | 1 [32m+[m
+ allure-results/f5f50b5f-67de-4bab-84a8-62ba3f02b057-result.json    | 1 [32m+[m
+ 21 files changed, 21 insertions(+)

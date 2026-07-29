@@ -2,6 +2,8 @@ package com.akash.nexusqa.core;
 
 import java.time.Duration;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -13,6 +15,7 @@ import com.akash.nexusqa.config.ConfigManager;
 
 public class DriverFactory {
 
+    private static final Logger logger = LogManager.getLogger(DriverFactory.class);
     private static final ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
 
     private DriverFactory() {
@@ -22,7 +25,7 @@ public class DriverFactory {
         WebDriver driver = driverThreadLocal.get();
 
         if (driver != null && !isSessionAlive(driver)) {
-            System.err.println("Detected dead browser session - discarding and creating a fresh one.");
+            logger.warn("Detected dead browser session - discarding and creating a fresh one.");
             quitDriver();
             driver = null;
         }
@@ -45,6 +48,7 @@ public class DriverFactory {
 
     private static void initDriver() {
         String browser = ConfigManager.getInstance().getBrowser().toLowerCase();
+        logger.info("Initializing WebDriver for browser: {}", browser);
         WebDriver driver;
 
         switch (browser) {
@@ -84,6 +88,7 @@ public class DriverFactory {
         driver.manage().timeouts().implicitlyWait(Duration.ZERO);
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
         driverThreadLocal.set(driver);
+        logger.info("WebDriver session started successfully.");
     }
 
     public static void quitDriver() {
@@ -91,9 +96,10 @@ public class DriverFactory {
             WebDriver driver = driverThreadLocal.get();
             if (driver != null) {
                 driver.quit();
+                logger.info("WebDriver session closed.");
             }
         } catch (Exception e) {
-            System.err.println("Error while quitting driver (session likely already dead): " + e.getMessage());
+            logger.warn("Error while quitting driver (session likely already dead): {}", e.getMessage());
         } finally {
             driverThreadLocal.remove();
             killOrphanedProcesses();
