@@ -4,12 +4,15 @@ import com.akash.nexusqa.config.ConfigManager;
 import com.akash.nexusqa.core.DriverFactory;
 import com.akash.nexusqa.pages.LoginPage;
 import com.akash.nexusqa.pages.ProductsPage;
+import com.akash.nexusqa.utils.ExcelReader;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import java.util.List;
 
 public class LoginTest {
 
@@ -38,12 +41,11 @@ public class LoginTest {
 
     @DataProvider(name = "invalidLoginData")
     public Object[][] invalidLoginData() {
-        return new Object[][] {
-            {"standard_user", "wrong_password", "Username and password do not match"},
-            {"invalid_user", "secret_sauce", "Username and password do not match"},
-            {"", "secret_sauce", "Username is required"},
-            {"standard_user", "", "Password is required"}
-        };
+        List<String[]> rows = ExcelReader.readSheet(
+                "src/test/resources/testdata/loginData.xlsx", "LoginData");
+        return rows.stream()
+                .map(row -> new Object[]{row[0], row[1], row[2]})
+                .toArray(Object[][]::new);
     }
 
     @Test(dataProvider = "invalidLoginData", groups = {"regression"})

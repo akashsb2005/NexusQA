@@ -61,4 +61,4 @@ public class LoginTest {
 }
 "@
 
-[System.IO.File]::WriteAllText("$PWD\src\test\java\com\akash\nexusqa\tests\ui\LoginTest.java", $content)
+[System.IO.File]::WriteAllText("$PWD\src\test\java\com\akash\nexusqa\tests\ui\LoginTest.java", $content)    
