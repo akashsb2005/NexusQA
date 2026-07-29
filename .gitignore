@@ -7,3 +7,6 @@ logs/*
 .idea/
 *.iml
 .vscode/
+allure-results/
+target/
+logs/*
