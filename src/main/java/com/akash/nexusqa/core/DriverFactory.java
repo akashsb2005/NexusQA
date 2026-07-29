@@ -16,19 +16,34 @@ public class DriverFactory {
     private static final ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
 
     private DriverFactory() {
-        // utility class, never instantiated
     }
 
     public static WebDriver getDriver() {
-        if (driverThreadLocal.get() == null) {
+        WebDriver driver = driverThreadLocal.get();
+
+        if (driver != null && !isSessionAlive(driver)) {
+            System.err.println("Detected dead browser session - discarding and creating a fresh one.");
+            quitDriver();
+            driver = null;
+        }
+
+        if (driver == null) {
             initDriver();
         }
+
         return driverThreadLocal.get();
     }
 
-    private static void initDriver() {
-        io.github.bonigarcia.wdm.WebDriverManager.chromedriver().setup();
+    private static boolean isSessionAlive(WebDriver driver) {
+        try {
+            driver.getCurrentUrl();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
+    private static void initDriver() {
         String browser = ConfigManager.getInstance().getBrowser().toLowerCase();
         WebDriver driver;
 
@@ -47,7 +62,18 @@ public class DriverFactory {
 
             case "chrome":
             default:
+                System.setProperty("webdriver.chrome.driver", "C:\\ChromeForTesting\\chromedriver-win64\\chromedriver.exe");
                 ChromeOptions chromeOptions = new ChromeOptions();
+                chromeOptions.setBinary("C:\\ChromeForTesting\\chrome-win64\\chrome.exe");
+                chromeOptions.addArguments("--disable-blink-features=AutomationControlled");
+                chromeOptions.addArguments("--remote-allow-origins=*");
+                chromeOptions.addArguments("start-maximized");
+                chromeOptions.addArguments("--disable-gpu");
+                chromeOptions.addArguments("--disable-extensions");
+                chromeOptions.addArguments("--disable-dev-shm-usage");
+                chromeOptions.addArguments("--no-sandbox");
+                chromeOptions.addArguments("--disable-background-networking");
+                chromeOptions.addArguments("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36");
                 if (ConfigManager.getInstance().isHeadless()) {
                     chromeOptions.addArguments("--headless=new");
                 }
@@ -56,16 +82,28 @@ public class DriverFactory {
         }
 
         driver.manage().timeouts().implicitlyWait(Duration.ZERO);
-        driver.manage().window().maximize();
-
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
         driverThreadLocal.set(driver);
     }
 
     public static void quitDriver() {
-        WebDriver driver = driverThreadLocal.get();
-        if (driver != null) {
-            driver.quit();
+        try {
+            WebDriver driver = driverThreadLocal.get();
+            if (driver != null) {
+                driver.quit();
+            }
+        } catch (Exception e) {
+            System.err.println("Error while quitting driver (session likely already dead): " + e.getMessage());
+        } finally {
             driverThreadLocal.remove();
+            killOrphanedProcesses();
+        }
+    }
+
+    private static void killOrphanedProcesses() {
+        try {
+            Runtime.getRuntime().exec(new String[]{"taskkill", "/F", "/IM", "chromedriver.exe", "/T"});
+        } catch (Exception ignored) {
         }
     }
 }

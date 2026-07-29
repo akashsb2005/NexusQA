@@ -1,0 +1,18 @@
+@"
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="NexusQA Smoke Suite" verbose="1">
+    <listeners>
+        <listener class-name="com.akash.nexusqa.listeners.TestListener"/>
+    </listeners>
+    <test name="Smoke Tests">
+        <groups>
+            <run>
+                <include name="smoke"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="com.akash.nexusqa.tests.ui.LoginTest"/>
+        </classes>
+    </test>
+</suite>
+"@ | Set-Content -Path src\test\resources\suites\smoke.xml -Encoding UTF8
