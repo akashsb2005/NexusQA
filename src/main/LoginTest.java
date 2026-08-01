@@ -1,5 +1,10 @@
-$content = @"
+
+ $content 
+
+    = @"
 package com.akash.nexusqa.tests.ui;
+import com.akash.nexusqa.utils.ExcelReader;
+import java.util.List;
 
 import com.akash.nexusqa.config.ConfigManager;
 import com.akash.nexusqa.core.DriverFactory;
@@ -14,37 +19,37 @@ import org.testng.annotations.Test;
 
 public class LoginTest {
 
-    @BeforeMethod
-    public void setUp() {
-        DriverFactory.getDriver().get(ConfigManager.getInstance().getBaseUrl());
-    }
+        @BeforeMethod
+        public void setUp() {
+            DriverFactory.getDriver().get(ConfigManager.getInstance().getBaseUrl());
+        }
 
-    private LoginPage getLoginPage() {
-        WebDriver driver = DriverFactory.getDriver();
-        return new LoginPage(driver);
-    }
+        private LoginPage getLoginPage() {
+            WebDriver driver = DriverFactory.getDriver();
+            return new LoginPage(driver);
+        }
 
-    @Test(groups = {"smoke", "regression"})
-    public void validLoginShouldLandOnProductsPage() {
-        ProductsPage productsPage = getLoginPage().loginAs("standard_user", "secret_sauce");
-        Assert.assertEquals(productsPage.getPageTitle(), "Products");
-    }
+        @Test(groups = {"smoke", "regression"})
+        public void validLoginShouldLandOnProductsPage() {
+            ProductsPage productsPage = getLoginPage().loginAs("standard_user", "secret_sauce");
+            Assert.assertEquals(productsPage.getPageTitle(), "Products");
+        }
 
-    @Test(groups = {"regression"})
-    public void lockedOutUserShouldSeeErrorMessage() {
-        getLoginPage().loginAs("locked_out_user", "secret_sauce");
-        Assert.assertTrue(getLoginPage().getErrorMessage().contains("locked out"),
-                "Expected locked-out error message to be shown");
-    }
+        @Test(groups = {"regression"})
+        public void lockedOutUserShouldSeeErrorMessage() {
+            getLoginPage().loginAs("locked_out_user", "secret_sauce");
+            Assert.assertTrue(getLoginPage().getErrorMessage().contains("locked out"),
+                    "Expected locked-out error message to be shown");
+        }
 
-    @DataProvider(name = "invalidLoginData")
-    public Object[][] invalidLoginData() {
-        return new Object[][] {
-            {"standard_user", "wrong_password", "Username and password do not match"},
-            {"invalid_user", "secret_sauce", "Username and password do not match"},
-            {"", "secret_sauce", "Username is required"},
-            {"standard_user", "", "Password is required"}
-        };
+        @DataProvider(name = "invalidLoginData")
+        public Object[][] invalidLoginData() {
+            List<String[]> rows = ExcelReader.readSheet(
+                    "src/test/resources/testdata/loginData.xlsx", "LoginData");
+            return rows.stream()
+                    .map(row -> new Object[]{row[0], row[1], row[2]})
+                    .toArray(Object[][]::new);
+        }
     }
 
     @Test(dataProvider = "invalidLoginData", groups = {"regression"})
@@ -61,4 +66,4 @@ public class LoginTest {
 }
 "@
 
-[System.IO.File]::WriteAllText("$PWD\src\test\java\com\akash\nexusqa\tests\ui\LoginTest.java", $content)    
+[System.IO.File]::WriteAllText("$PWD\src\test\java\com\akash\nexusqa\tests\ui\LoginTest.java", $content)
