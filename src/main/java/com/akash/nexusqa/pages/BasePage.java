@@ -45,4 +45,19 @@ public abstract class BasePage {
             return false;
         }
     }
+/**
+     * Attempts to click using the primary locator; if not found within a short
+     * timeout, falls back to an alternate locator before giving up.
+     */
+    protected void clickWithFallback(org.openqa.selenium.By primaryLocator, org.openqa.selenium.By fallbackLocator) {
+        try {
+            org.openqa.selenium.WebElement element = new org.openqa.selenium.support.ui.WebDriverWait(driver, java.time.Duration.ofSeconds(3))
+                    .until(org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable(primaryLocator));
+            element.click();
+        } catch (org.openqa.selenium.TimeoutException e) {
+            org.apache.logging.log4j.LogManager.getLogger(BasePage.class)
+                    .warn("Primary locator {} not found, falling back to {}", primaryLocator, fallbackLocator);
+            wait.until(org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable(fallbackLocator)).click();
+        }
+    }
 }
