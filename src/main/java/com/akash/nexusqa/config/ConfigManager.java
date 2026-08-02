@@ -56,4 +56,20 @@ public class ConfigManager {
     public boolean isHeadless() {
         return Boolean.parseBoolean(properties.getProperty("headless", "false"));
     }
+
+    public boolean isUseGrid() {
+        return Boolean.parseBoolean(properties.getProperty("useGrid", "false"));
+    }
+
+    public String getDbUrl() {
+        return properties.getProperty("dbUrl");
+    }
+
+    public String getDbUsername() {
+        return properties.getProperty("dbUsername");
+    }
+
+    public String getDbPassword() {
+        return properties.getProperty("dbPassword");
+    }
 }

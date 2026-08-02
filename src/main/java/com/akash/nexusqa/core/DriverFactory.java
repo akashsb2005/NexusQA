@@ -12,6 +12,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 
 import com.akash.nexusqa.config.ConfigManager;
+import com.akash.nexusqa.exceptions.FrameworkException;
 
 public class DriverFactory {
 
@@ -66,9 +67,7 @@ public class DriverFactory {
 
             case "chrome":
             default:
-                System.setProperty("webdriver.chrome.driver", "C:\\ChromeForTesting\\chromedriver-win64\\chromedriver.exe");
                 ChromeOptions chromeOptions = new ChromeOptions();
-                chromeOptions.setBinary("C:\\ChromeForTesting\\chrome-win64\\chrome.exe");
                 chromeOptions.addArguments("--disable-blink-features=AutomationControlled");
                 chromeOptions.addArguments("--remote-allow-origins=*");
                 chromeOptions.addArguments("start-maximized");
@@ -81,7 +80,19 @@ public class DriverFactory {
                 if (ConfigManager.getInstance().isHeadless()) {
                     chromeOptions.addArguments("--headless=new");
                 }
-                driver = new ChromeDriver(chromeOptions);
+
+                if (ConfigManager.getInstance().isUseGrid()) {
+                    try {
+                        driver = new org.openqa.selenium.remote.RemoteWebDriver(
+                                new java.net.URL("http://localhost:4444/wd/hub"), chromeOptions);
+                    } catch (java.net.MalformedURLException e) {
+                        throw new FrameworkException("Invalid Grid URL", e);
+                    }
+                } else {
+                    System.setProperty("webdriver.chrome.driver", "C:\\ChromeForTesting\\chromedriver-win64\\chromedriver.exe");
+                    chromeOptions.setBinary("C:\\ChromeForTesting\\chrome-win64\\chrome.exe");
+                    driver = new ChromeDriver(chromeOptions);
+                }
                 break;
         }
 
