@@ -76,7 +76,6 @@ public class DriverFactory {
                 chromeOptions.addArguments("--disable-dev-shm-usage");
                 chromeOptions.addArguments("--no-sandbox");
                 chromeOptions.addArguments("--disable-background-networking");
-                chromeOptions.addArguments("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36");
                 if (ConfigManager.getInstance().isHeadless()) {
                     chromeOptions.addArguments("--headless=new");
                 }
@@ -89,8 +88,6 @@ public class DriverFactory {
                         throw new FrameworkException("Invalid Grid URL", e);
                     }
                 } else {
-                    System.setProperty("webdriver.chrome.driver", "C:\\ChromeForTesting\\chromedriver-win64\\chromedriver.exe");
-                    chromeOptions.setBinary("C:\\ChromeForTesting\\chrome-win64\\chrome.exe");
                     driver = new ChromeDriver(chromeOptions);
                 }
                 break;
@@ -119,7 +116,12 @@ public class DriverFactory {
 
     private static void killOrphanedProcesses() {
         try {
-            Runtime.getRuntime().exec(new String[]{"taskkill", "/F", "/IM", "chromedriver.exe", "/T"});
+            String os = System.getProperty("os.name", "").toLowerCase();
+            if (os.contains("win")) {
+                Runtime.getRuntime().exec(new String[]{"taskkill", "/F", "/IM", "chromedriver.exe", "/T"});
+            } else {
+                Runtime.getRuntime().exec(new String[]{"pkill", "-f", "chromedriver"});
+            }
         } catch (Exception ignored) {
         }
     }
