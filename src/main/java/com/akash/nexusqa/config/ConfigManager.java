@@ -10,6 +10,20 @@ import java.util.Properties;
 
 public class ConfigManager {
 
+
+    public String getBrowser() {
+        String override = System.getProperty("browser");
+        return override != null ? override : properties.getProperty("browser", "chrome");
+    }
+
+    public boolean isHeadless() {
+        String override = System.getProperty("headless");
+        if (override != null) {
+            return Boolean.parseBoolean(override);
+        }
+        return Boolean.parseBoolean(properties.getProperty("headless", "false"));
+    }
+
     private static final Logger logger = LogManager.getLogger(ConfigManager.class);
     private static ConfigManager instance;
     private final Properties properties;
