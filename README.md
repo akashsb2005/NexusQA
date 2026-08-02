@@ -5,8 +5,7 @@
  
 <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=20&duration=3000&pause=800&color=8B85FF&center=true&vCenter=true&width=650&lines=Selenium+%2B+TestNG+%2B+Java+17;UI+%2B+API+%2B+Database+Testing;CI%2FCD+with+GitHub+Actions;Dockerized+Selenium+Grid" alt="Typing SVG" />
 <br/>
-![CI](https://github.com/akashsb2005/NexusQA/actions/workflows/ci.yml/badge.svg)
-<img src="https://img.shields.io/badge/Java-17-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white"/>
+<img src="https://github.com/akashsb2005/NexusQA/actions/workflows/ci.yml/badge.svg" alt="CI"/><img src="https://img.shields.io/badge/Java-17-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white"/>
 <img src="https://img.shields.io/badge/Selenium-4.27-43B02A?style=for-the-badge&logo=selenium&logoColor=white"/>
 <img src="https://img.shields.io/badge/TestNG-7.8-EF2D5E?style=for-the-badge"/>
 <img src="https://img.shields.io/badge/Maven-Build-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white"/>
