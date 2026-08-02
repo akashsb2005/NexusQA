@@ -10,20 +10,6 @@ import java.util.Properties;
 
 public class ConfigManager {
 
-
-    public String getBrowser() {
-        String override = System.getProperty("browser");
-        return override != null ? override : properties.getProperty("browser", "chrome");
-    }
-
-    public boolean isHeadless() {
-        String override = System.getProperty("headless");
-        if (override != null) {
-            return Boolean.parseBoolean(override);
-        }
-        return Boolean.parseBoolean(properties.getProperty("headless", "false"));
-    }
-
     private static final Logger logger = LogManager.getLogger(ConfigManager.class);
     private static ConfigManager instance;
     private final Properties properties;
@@ -48,7 +34,16 @@ public class ConfigManager {
     }
 
     public String getBrowser() {
-        return properties.getProperty("browser", "chrome");
+        String override = System.getProperty("browser");
+        return override != null ? override : properties.getProperty("browser", "chrome");
+    }
+
+    public boolean isHeadless() {
+        String override = System.getProperty("headless");
+        if (override != null) {
+            return Boolean.parseBoolean(override);
+        }
+        return Boolean.parseBoolean(properties.getProperty("headless", "false"));
     }
 
     public String getBaseUrl() {
@@ -65,10 +60,6 @@ public class ConfigManager {
 
     public int getExplicitWaitSeconds() {
         return Integer.parseInt(properties.getProperty("explicitWaitSeconds", "10"));
-    }
-
-    public boolean isHeadless() {
-        return Boolean.parseBoolean(properties.getProperty("headless", "false"));
     }
 
     public boolean isUseGrid() {

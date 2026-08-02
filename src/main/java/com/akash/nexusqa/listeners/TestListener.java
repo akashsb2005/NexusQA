@@ -1,19 +1,36 @@
 package com.akash.nexusqa.listeners;
 
-import com.akash.nexusqa.core.DriverFactory;
-import com.akash.nexusqa.utils.ScreenshotUtils;
+import io.qameta.allure.Allure;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
+
+import com.akash.nexusqa.core.DriverFactory;
+import com.akash.nexusqa.utils.ScreenshotUtils;
+
+import java.io.ByteArrayInputStream;
 
 public class TestListener implements ITestListener {
 
     @Override
     public void onTestFailure(ITestResult result) {
         String testName = result.getMethod().getMethodName();
-        String screenshotPath = ScreenshotUtils.captureScreenshot(DriverFactory.getDriver(), testName);
+        WebDriver driver = DriverFactory.getDriver();
+
+        String screenshotPath = ScreenshotUtils.captureScreenshot(driver, testName);
         System.out.println("Test FAILED: " + testName +
                 (screenshotPath != null ? " | Screenshot: " + screenshotPath : " | Screenshot capture failed"));
+
+        if (driver instanceof TakesScreenshot) {
+            byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+            Allure.addAttachment(
+                    testName + " - failure screenshot",
+                    new ByteArrayInputStream(screenshot)
+            );
+        }
     }
 
     @Override

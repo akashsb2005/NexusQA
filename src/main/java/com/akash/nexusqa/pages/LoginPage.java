@@ -3,6 +3,7 @@ package com.akash.nexusqa.pages;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import io.qameta.allure.Step;
 
 public class LoginPage extends BasePage {
 
@@ -22,6 +23,7 @@ public class LoginPage extends BasePage {
         super(driver);
     }
 
+    @Step("Log in as user: {username}")
     public ProductsPage loginAs(String username, String password) {
         type(usernameField, username);
         type(passwordField, password);

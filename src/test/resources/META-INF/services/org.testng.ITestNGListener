@@ -1,1 +1,3 @@
 com.akash.nexusqa.listeners.RetryListener
+io.qameta.allure.testng.AllureTestNg
+com.akash.nexusqa.listeners.TestListener
