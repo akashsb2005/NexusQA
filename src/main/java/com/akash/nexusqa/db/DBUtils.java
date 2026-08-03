@@ -10,7 +10,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Properties;
 
 public class DBUtils {
 
@@ -20,26 +19,15 @@ public class DBUtils {
     }
 
     private static Connection getConnection() {
-        Properties props = loadDbProperties();
         try {
-            String url = props.getProperty("dbUrl");
-            String username = props.getProperty("dbUsername");
-            String password = props.getProperty("dbPassword");
+            String url = ConfigManager.getInstance().getDbUrl();
+            String username = ConfigManager.getInstance().getDbUsername();
+            String password = ConfigManager.getInstance().getDbPassword();
             return DriverManager.getConnection(url, username, password);
         } catch (SQLException e) {
             logger.error("Failed to connect to database", e);
             throw new FrameworkException("Could not connect to database", e);
         }
-    }
-
-    private static Properties loadDbProperties() {
-        Properties props = new Properties();
-        try (var fis = new java.io.FileInputStream("src/test/resources/config/config.properties")) {
-            props.load(fis);
-        } catch (java.io.IOException e) {
-            throw new FrameworkException("Could not load DB config properties", e);
-        }
-        return props;
     }
 
     public static boolean userExistsByEmail(String email) {
