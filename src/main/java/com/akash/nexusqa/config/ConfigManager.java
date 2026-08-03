@@ -67,14 +67,17 @@ public class ConfigManager {
     }
 
     public String getDbUrl() {
-        return properties.getProperty("dbUrl");
+        String override = System.getProperty("db.url");
+        return override != null ? override : properties.getProperty("dbUrl");
     }
 
     public String getDbUsername() {
-        return properties.getProperty("dbUsername");
+        String override = System.getProperty("db.user");
+        return override != null ? override : properties.getProperty("dbUsername");
     }
 
     public String getDbPassword() {
-        return properties.getProperty("dbPassword");
+        String override = System.getProperty("db.password");
+        return override != null ? override : properties.getProperty("dbPassword");
     }
 }
