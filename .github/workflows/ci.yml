@@ -36,6 +36,11 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
+      - name: Load database schema
+        run: |
+          sudo apt-get install -y postgresql-client
+          PGPASSWORD=postgres psql -h localhost -U postgres -d nexusqa -f db/init/schema.sql
+
       - name: Run test suite
         run: mvn clean test -Dexecution.mode=local -Dbrowser=chrome -Dheadless=true -Ddb.url=jdbc:postgresql://localhost:5432/nexusqa -Ddb.user=postgres -Ddb.password=postgres
 
